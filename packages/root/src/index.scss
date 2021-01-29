@@ -1,0 +1,81 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  background: #6441a5;
+  background: linear-gradient(to right, #6441a5, #2a0845);
+  &.hidden-overflow {
+    overflow: hidden;
+  }
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-gap: 10px;
+  grid-auto-rows: minmax(250px, auto);
+  grid-auto-flow: dense;
+  padding: 10px;
+
+  &.wiggle > .widget {
+    animation: wiggle 0.69420s infinite;
+  }
+
+  .widget {
+    padding: 1rem;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #929796;
+    background-color: #333;
+    border-radius: 5px;
+
+    @for $i from 1 to 11 {
+      &.widget-width-span-#{$i} {
+        grid-column-end: span #{$i};
+      }
+
+      &.widget-height-span-#{$i} {
+        grid-row-end: span #{$i};
+      }
+    }
+  }
+}
+
+#settings-screen {
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.75);
+  height: 100vh;
+  width: 100vw;
+  z-index: 9999;
+  top: 0;
+  transform: translate(200%, -200%);
+  opacity: 0;
+  border-radius: 100%;
+  transition: all 300ms;
+
+  &.visible {
+    transform: translate(0, 0);
+    opacity: 1;
+    border-radius: 0;
+  }
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0.5deg);
+  }
+  25% {
+    transform: rotate(-0.5deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+  75% {
+    transform: rotate(-0.5deg);
+  }
+  100% {
+    transform: rotate(0.5deg);
+  }
+}

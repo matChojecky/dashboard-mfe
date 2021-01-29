@@ -1,0 +1,30 @@
+{
+    "name": "@dashboard/air-polution",
+    "version": "0.0.0",
+    "private": true,
+    "devDependencies": {
+      "@babel/core": "7.12.10",
+      "@babel/preset-react": "7.12.10",
+      "babel-loader": "^8.2.2",
+      "babel-plugin-named-asset-import": "^0.3.7",
+      "file-loader": "^6.2.0",
+      "html-webpack-plugin": "^4.5.1",
+      "serve": "11.3.2",
+      "terser-webpack-plugin": "^5.1.1",
+      "url-loader": "^4.1.1",
+      "webpack": "5.14.0",
+      "webpack-cli": "4.3.1",
+      "webpack-dev-server": "3.11.2",
+      "webpack-manifest-plugin": "^3.0.0"
+    },
+    "scripts": {
+      "start": "webpack-cli serve -c config/webpack.config.js",
+      "build": "webpack -c ./config/webpack.config.js",
+      "serve": "serve build -p 3000",
+      "clean": "rm -rf dist"
+    },
+    "dependencies": {
+      "react": "^17.0.1",
+      "react-dom": "^17.0.1"
+    }
+  }
