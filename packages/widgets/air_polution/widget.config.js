@@ -1,9 +1,9 @@
 module.exports.AirPolutionWidget = {
     name: "Air Polution Meter",
-    id: "air-polution-widget",
+    id: "air_polution_widget",
     url: {
-        dev: "https://localhost:3001/remoteEntry.js",
+        development: "http://localhost:3001/remoteEntry.js",
         test: null,
-        prod: null
+        production: null
     }
 }

@@ -8,4 +8,4 @@ module.exports.SUPPORTED_WIDGETS = (function (env) {
         AirPolutionWidget
     ]
     return widgets.map(w => ({ ...w, url: w.url[env] }));
-})(process.env.NODE_ENV?.toLowerCase() ?? 'dev')
+})(process.env.NODE_ENV?.toLowerCase() ?? 'development')
