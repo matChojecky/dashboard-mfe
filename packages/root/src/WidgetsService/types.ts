@@ -3,6 +3,7 @@ import type { WidgetModule } from "../widget";
 export interface WidgetInfo {
   name: string;
   id: string;
+  url: string;
 }
 
 export interface WidgetSettings extends WidgetInfo {

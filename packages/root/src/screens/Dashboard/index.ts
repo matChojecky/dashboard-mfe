@@ -33,7 +33,7 @@ export default class Dashboard extends _View {
   }
 
   mount() {
-    window.document.body.appendChild(this._view);
+    window.document.body.prepend(this._view);
   }
 
   unmount() {

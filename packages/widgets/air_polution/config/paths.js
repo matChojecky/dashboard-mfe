@@ -53,7 +53,11 @@ module.exports = {
 //   yarnLockFile: resolveApp('yarn.lock'),
 //   testsSetup: resolveModule(resolveApp, 'src/setupTests'),
   appNodeModules: resolveApp('node_modules'),
-  publicUrlOrPath,
+  get publicUrlOrPath() {
+    if(process.env.NODE_ENV === 'development') {
+      return 'http://localhost:3001/'
+    }
+  },
 };
 
 

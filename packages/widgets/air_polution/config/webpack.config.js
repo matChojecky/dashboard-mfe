@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
-const webpack = require("webpack");
-const { ModuleFederationPlugin } = webpack.container;
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -12,7 +12,7 @@ const postcssNormalize = require("postcss-normalize");
 const paths = require("./paths");
 const { AirPolutionWidget } = require("../widget.config");
 
-const isDevelopment = false;
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -114,9 +114,9 @@ module.exports = {
     devtoolModuleFilenameTemplate: isDevelopment
       ? (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, "/")
       : (info) =>
-          path
-            .relative(paths.appSrc, info.absoluteResourcePath)
-            .replace(/\\/g, "/"),
+        path
+          .relative(paths.appSrc, info.absoluteResourcePath)
+          .replace(/\\/g, "/"),
   },
   optimization: {
     minimize: !isDevelopment,
@@ -149,9 +149,7 @@ module.exports = {
       chunks: "all",
       name: false,
     },
-    runtimeChunk: {
-      name: (entrypoint) => `runtime-${entrypoint.name}`,
-    },
+    runtimeChunk: false,
   },
   resolve: {
     extensions: paths.moduleFileExtensions
@@ -305,14 +303,19 @@ module.exports = {
     ],
   },
   plugins: [
+
     new ModuleFederationPlugin({
       name: AirPolutionWidget.id,
-      filename: "remoteEntry.js",
-      exposes: {
-        "./": "./src/index.ts",
+      library: {
+        type: 'var',
+        name: AirPolutionWidget.id
       },
-      remoteType: "var",
-      // shared: {},
+      filename: "remoteEntry.js",
+      remotes: {},
+      exposes: {
+        "./": "./src/index",
+      },
+      shared: {},
     }),
     new HtmlWebpackPlugin(
       Object.assign(
@@ -323,28 +326,28 @@ module.exports = {
         },
         !isDevelopment
           ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
+            minify: {
+              removeComments: true,
+              collapseWhitespace: true,
+              removeRedundantAttributes: true,
+              useShortDoctype: true,
+              removeEmptyAttributes: true,
+              removeStyleLinkTypeAttributes: true,
+              keepClosingSlash: true,
+              minifyJS: true,
+              minifyCSS: true,
+              minifyURLs: true,
+            },
+          }
           : undefined
       )
     ),
 
     !isDevelopment &&
-      new MiniCssExtractPlugin({
-        filename: "static/css/[name].[contenthash:8].css",
-        chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
-      }),
+    new MiniCssExtractPlugin({
+      filename: "static/css/[name].[contenthash:8].css",
+      chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
+    }),
 
     new ManifestPlugin({
       fileName: "asset-manifest.json",
@@ -365,7 +368,7 @@ module.exports = {
       },
     }),
 
-    new webpack.IgnorePlugin({
+    new IgnorePlugin({
       resourceRegExp: /^\.\/locale$/,
       contextRegExp: /moment$/,
     }),

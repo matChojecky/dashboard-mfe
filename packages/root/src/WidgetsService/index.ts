@@ -1,25 +1,6 @@
 import type { WidgetInfo, WidgetSettings, Widget } from "./types";
 import { WIDGET_STORAGE_KEY, noopModule } from "./constants";
-
-
-function loadComponent(scope: string, module: string) {
-  return async () => {
-    // Initializes the share scope. This fills it with known provided modules from this build and all remotes
-    // @ts-ignore
-    await __webpack_init_sharing__("default");
-    // @ts-ignore
-    console.log(scope, window[scope])
-    // @ts-ignore
-    const container = window[scope]; // or get the container somewhere else
-    // Initialize the container, it may provide shared modules
-    // @ts-ignore
-    await container.init(__webpack_share_scopes__.default);
-    // @ts-ignoreś
-    const factory = await window[scope].get(module);
-    const Module = factory();
-    return Module;
-  };
-}
+import * as AssetsLoader from "./assets_loader";
 
 export default class WidgetService {
   constructor(private widgets: WidgetInfo[]) {}
@@ -59,11 +40,13 @@ export default class WidgetService {
     console.log(this.getSupportedWidgets());
     const widgets = this.getSupportedWidgets() as Widget[];
 
+    await Promise.all(widgets.map((w) => AssetsLoader.loadScript(w.url)));
+
     try {
       for (const widget of widgets) {
-        // @ts-ignore
-        const widget_module = await loadComponent("air_polution_widget", './')();
+        const widget_module = await AssetsLoader.loadComponent(widget.id)();
         console.log(widget_module);
+        widget.settings = widget.settings ?? { width: 3, height: 4 }
         widget.module = widget_module ?? noopModule(widget);
       }
     } catch (err) {
@@ -71,11 +54,12 @@ export default class WidgetService {
     }
 
     // return widgets;
-    return Array(8)
+    return [...widgets, ...Array(4)
       .fill(undefined)
       .map((_, idx) => ({
         name: "test",
         id: "testing-module-" + idx,
+        url: "testing-module-" + idx,
         settings: {
           width: Math.floor(Math.random() * 5),
           height: Math.floor(Math.random() * 5),
@@ -85,6 +69,6 @@ export default class WidgetService {
             root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
           },
         },
-      }));
+      }))];
   }
 }

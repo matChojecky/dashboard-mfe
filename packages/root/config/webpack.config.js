@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const webpack = require('webpack');
-const { ModuleFederationPlugin } = webpack.container;
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -9,7 +9,8 @@ const { WebpackManifestPlugin: ManifestPlugin } = require('webpack-manifest-plug
 const postcssNormalize = require('postcss-normalize');
 const paths = require('./paths');
 const { SUPPORTED_WIDGETS } = require('../../../widgets.config');
-const isDevelopment = false;
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const appPackageJson = require(paths.appPackageJson);
 
@@ -142,9 +143,7 @@ module.exports = {
             chunks: 'all',
             name: false,
         },
-        runtimeChunk: {
-            name: entrypoint => `runtime-${entrypoint.name}`,
-        },
+        runtimeChunk: false,
     },
     resolve: {
         extensions: paths.moduleFileExtensions
@@ -307,7 +306,9 @@ module.exports = {
                 curr[widget.id] = `${widget.id}@${widget.url}`
                 return curr;
             }, {}),
-            // shared: {},
+            filename: 'remoteEntry.js',
+            exposes: {},
+            shared: Object.keys(appPackageJson.dependencies),
         }),
         new HtmlWebpackPlugin(
             Object.assign(
@@ -359,6 +360,6 @@ module.exports = {
             },
         }),
 
-        new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
+        new IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
     ].filter(Boolean)
 }
