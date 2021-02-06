@@ -4,7 +4,6 @@ module.exports = {
     AirPolutionWidget
 }
 module.exports.SUPPORTED_WIDGETS = (function (env) {
-    console.log({env})
     const widgets = [
         AirPolutionWidget
     ]

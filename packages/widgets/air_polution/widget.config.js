@@ -7,3 +7,4 @@ module.exports.AirPolutionWidget = {
         production: null
     }
 }
+
