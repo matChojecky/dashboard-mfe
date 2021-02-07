@@ -46,7 +46,7 @@ export default class WidgetService {
       for (const widget of widgets) {
         const widget_module = await AssetsLoader.loadComponent(widget.id)();
         console.log(widget_module);
-        widget.settings = widget.settings ?? { width: 3, height: 4 }
+        widget.settings = widget.settings ?? { width: 2, height: 2 }
         widget.module = widget_module ?? noopModule(widget);
       }
     } catch (err) {

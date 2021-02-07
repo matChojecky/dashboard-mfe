@@ -19,17 +19,16 @@ body {
   padding: 10px;
 
   &.wiggle > .widget {
-    animation: wiggle 0.69420s infinite;
+    animation: wiggle 0.6942s infinite;
   }
 
   .widget {
-    padding: 1rem;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #929796;
-    background-color: #333;
     border-radius: 5px;
+    overflow: hidden;
+
+    * {
+      box-sizing: border-box;
+    }
 
     @for $i from 1 to 11 {
       &.widget-width-span-#{$i} {

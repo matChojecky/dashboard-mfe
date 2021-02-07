@@ -1,31 +1,20 @@
 // https://api.waqi.info/feed/krakow/?token=f4bb3f6a14602ca9cfd35f5d9c9f1355072016ee
 
-import { idText } from "typescript";
+import { AirPollutionPmLevels } from "../constants";
 
-type Polution =
-  | "co"
-  | "dev"
-  | "h"
-  | "no2"
-  | "o3"
-  | "p"
-  | "pm10"
-  | "pm25"
-  | "so2"
-  | "t"
-  | "w"
-  | "wg";
+type AirPollutionKey = "co" | "no2" | "o3" | "pm10" | "pm25" | "so2";
 
 interface WAQIResponse {
   status: "ok" | "error";
   data: WAQIResponseData;
 }
+
 interface WAQIResponseData {
   aqi: number;
   idx: number;
-  dominentpol: Polution;
+  dominentpol: AirPollutionKey;
   iaqi: {
-    [key in Polution]: {
+    [key in AirPollutionKey]: {
       v: number;
     };
   };
@@ -41,27 +30,26 @@ interface WAQIResponseData {
 
 interface AirQualityData {
   aqi: number;
-  dominentPolition: Polution;
-  individualAirQualityIndex: {
-    [key in Polution]: number;
-  };
+  level: string;
+  color: string;
+  iaqui: {
+    [key in AirPollutionKey]: number;
+  }
 }
 
 const normalizeResponseData = (response: WAQIResponseData): AirQualityData => {
+  const aqi = response.iaqi["pm25"].v;
+  const { level, color } = AirPollutionPmLevels.find(
+    (aqiLevel) => aqi >= aqiLevel.min && aqi < aqiLevel.max
+  );
   return {
-    aqi: response.aqi,
-    dominentPolition: response.dominentpol,
-    individualAirQualityIndex: Object.entries(response.iaqi).reduce(
-      (curr, [key, value]) => {
-        curr[key] = value.v;
-        return curr;
-      },
-      {} as { [key in Polution]: number }
-    ),
+    aqi,
+    level,
+    color,
   };
 };
 
-export async function getAirQualityData(): Promise<any> {
+export async function getAirQualityData(): Promise<AirQualityData> {
   const response = await fetch(
     "https://api.waqi.info/feed/krakow/?token=f4bb3f6a14602ca9cfd35f5d9c9f1355072016ee"
   );
