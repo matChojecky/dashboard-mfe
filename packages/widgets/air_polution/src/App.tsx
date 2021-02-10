@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getAirQualityData } from "./api/air_polution";
+import { getAirQualityData, AirQualityData } from "./api/air_polution";
+import styled from "styled-components";
 
-import styled, { css } from "styled-components";
+import "./index.css";
+import { FillContainerLoader } from "./components/loader";
+import PollutantsDetails from "./components/pollutants_details";
 
 const WidgetContainer = styled.div`
   width: 100%;
@@ -9,6 +12,7 @@ const WidgetContainer = styled.div`
   background-color: #ffffff;
   padding: 1em;
   font-size: 2em;
+  font-family: "Fira Sans", sans-serif;
 `;
 
 const TestIndicator = styled.div`
@@ -16,7 +20,7 @@ const TestIndicator = styled.div`
 `;
 
 export default function App() {
-  const [airQ, setAirData] = useState(null);
+  const [airQ, setAirData] = useState<AirQualityData>();
   useEffect(() => {
     const doer = () => {
       getAirQualityData().then((data) => {
@@ -31,12 +35,15 @@ export default function App() {
   return (
     <WidgetContainer>
       {!!airQ ? (
-        <TestIndicator color={airQ.color}>
-          <div>{airQ.aqi}</div>
-          <div>{airQ.level}</div>
-        </TestIndicator>
+        <>
+          <TestIndicator color={airQ.color}>
+            <div>{airQ.aqi}</div>
+            <div>{airQ.level}</div>
+          </TestIndicator>
+          <PollutantsDetails iaqi={airQ.iaqi} />
+        </>
       ) : (
-        "LOADING!!!"
+        <FillContainerLoader />
       )}
     </WidgetContainer>
   );
