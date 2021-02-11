@@ -49,6 +49,7 @@ export interface AirQualityData {
   weatherInfo: {
     [key in WeatherFeatures]: number;
   };
+  requestTimestamp: number;
 }
 
 const normalizeResponseData = (response: WAQIResponseData): AirQualityData => {
@@ -70,6 +71,7 @@ const normalizeResponseData = (response: WAQIResponseData): AirQualityData => {
           v,
         ])
     ) as { [key in WeatherFeatures]: number },
+    requestTimestamp: Date.now(),
   };
 };
 
@@ -84,3 +86,5 @@ export async function getAirQualityData(): Promise<AirQualityData> {
 
   return normalizeResponseData(data.data);
 }
+
+export const AIR_QUALITY_QUERY_KEY = "AIR_QUALITY_QUERY_KEY";

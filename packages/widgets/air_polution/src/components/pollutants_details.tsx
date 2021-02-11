@@ -58,8 +58,9 @@ export default function PollutantsDetails({ iaqi }: PollutantsDetailsProps) {
         ([key, value]) => {
           const aqiLevel = lookupAirPollutionLevel(value);
           return (
-            <li>
-              {renderPollutantName(key)} -- {value} -- <PollutionLevelIndicatior pollutionLevelColor={aqiLevel.color} />
+            <li key={key}>
+              {renderPollutantName(key)} -- {value} --{" "}
+              <PollutionLevelIndicatior pollutionLevelColor={aqiLevel.color} />
             </li>
           );
         }
