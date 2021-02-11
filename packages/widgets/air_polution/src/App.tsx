@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getAirQualityData, AirQualityData } from "./api/air_polution";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import "./index.css";
 import { FillContainerLoader } from "./components/loader";
 import PollutantsDetails from "./components/pollutants_details";
+import AqiIndicator from "./components/aqi_indicator";
+import { useThemeConnector } from "./hooks/useThemeConnector";
 
 const WidgetContainer = styled.div`
   width: 100%;
@@ -15,11 +17,11 @@ const WidgetContainer = styled.div`
   font-family: "Fira Sans", sans-serif;
 `;
 
-const TestIndicator = styled.div`
-  background-color: ${(props) => props.color};
-`;
+interface AppProps {
+  rootNode: Element;
+}
 
-export default function App() {
+export default function App({ rootNode }: AppProps) {
   const [airQ, setAirData] = useState<AirQualityData>();
   useEffect(() => {
     const doer = () => {
@@ -32,19 +34,19 @@ export default function App() {
     const interval = window.setInterval(doer, 5 * 60 * 1000);
     () => window.clearInterval(interval);
   }, [setAirData]);
+  const theme = useThemeConnector(rootNode);
   return (
-    <WidgetContainer>
-      {!!airQ ? (
-        <>
-          <TestIndicator color={airQ.color}>
-            <div>{airQ.aqi}</div>
-            <div>{airQ.level}</div>
-          </TestIndicator>
-          <PollutantsDetails iaqi={airQ.iaqi} />
-        </>
-      ) : (
-        <FillContainerLoader />
-      )}
-    </WidgetContainer>
+    <ThemeProvider theme={theme}>
+      <WidgetContainer>
+        {!!airQ ? (
+          <>
+            <AqiIndicator aqi={airQ.aqi} />
+            <PollutantsDetails iaqi={airQ.iaqi} />
+          </>
+        ) : (
+          <FillContainerLoader />
+        )}
+      </WidgetContainer>
+    </ThemeProvider>
   );
 }

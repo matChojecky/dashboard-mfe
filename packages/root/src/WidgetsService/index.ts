@@ -46,7 +46,7 @@ export default class WidgetService {
       for (const widget of widgets) {
         const widget_module = await AssetsLoader.loadComponent(widget.id)();
         console.log(widget_module);
-        widget.settings = widget.settings ?? { width: 2, height: 2 }
+        widget.settings = widget.settings ?? { width: 2, height: 3 };
         widget.module = widget_module ?? noopModule(widget);
       }
     } catch (err) {
@@ -54,21 +54,24 @@ export default class WidgetService {
     }
 
     // return widgets;
-    return [...widgets, ...Array(4)
-      .fill(undefined)
-      .map((_, idx) => ({
-        name: "test",
-        id: "testing-module-" + idx,
-        url: "testing-module-" + idx,
-        settings: {
-          width: Math.floor(Math.random() * 5),
-          height: Math.floor(Math.random() * 5),
-        },
-        module: {
-          mount(root) {
-            root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
+    return [
+      ...widgets,
+      ...Array(3)
+        .fill(undefined)
+        .map((_, idx) => ({
+          name: "test",
+          id: "testing-module-" + idx,
+          url: "testing-module-" + idx,
+          settings: {
+            width: Math.floor(Math.random() * 5),
+            height: Math.floor(Math.random() * 5),
           },
-        },
-      }))];
+          module: {
+            mount(root) {
+              root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
+            },
+          },
+        })),
+    ];
   }
 }

@@ -1,4 +1,4 @@
-export const AirPollutionPmLevels = [
+export const AIR_POLLUTION_LEVEL = [
     {
         min: 0,
         max: 50,

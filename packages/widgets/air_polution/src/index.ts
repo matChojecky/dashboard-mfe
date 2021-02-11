@@ -4,5 +4,5 @@ import App from './App';
 
 export function mount(root: Element) {
   console.log(root);
-  render(React.createElement(App), root);
+  render(React.createElement(App, {rootNode: root}), root);
 }

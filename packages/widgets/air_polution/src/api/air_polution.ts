@@ -1,6 +1,5 @@
 // https://api.waqi.info/feed/krakow/?token=f4bb3f6a14602ca9cfd35f5d9c9f1355072016ee
-
-import { AirPollutionPmLevels } from "../constants";
+import { lookupAirPollutionLevel } from "../utils/lookup_air_polution_level";
 
 const AirPolluttants = ["co", "no2", "o3", "pm10", "pm25", "so2"] as const;
 
@@ -44,8 +43,6 @@ interface WAQIResponseData {
 
 export interface AirQualityData {
   aqi: number;
-  level: string;
-  color: string;
   iaqi: {
     [key in AirPollutionKey]: number;
   };
@@ -56,14 +53,8 @@ export interface AirQualityData {
 
 const normalizeResponseData = (response: WAQIResponseData): AirQualityData => {
   const aqi = response.iaqi["pm25"].v;
-  const { level, color } =
-    AirPollutionPmLevels.find(
-      (aqiLevel) => aqi >= aqiLevel.min && aqi < aqiLevel.max
-    ) ?? AirPollutionPmLevels[AirPollutionPmLevels.length - 1];
   return {
     aqi,
-    level,
-    color,
     iaqi: Object.fromEntries(
       Object.entries(response.iaqi)
         .filter(([key]) => (AirPolluttants as readonly string[]).includes(key))
