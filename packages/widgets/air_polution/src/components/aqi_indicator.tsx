@@ -1,6 +1,7 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import styled, { useTheme } from "styled-components";
 import { lookupAirPollutionLevel } from "../utils/lookup_air_polution_level";
+import RequestStatus, { RequestStatusProp } from "./request";
 
 const IndicatorWrapper = styled.div`
   display: flex;
@@ -18,7 +19,9 @@ const Indicator = styled.div<{ shadowColor: string }>`
   align-items: center;
   flex-direction: column;
   border-radius: 50%;
-  box-shadow: 0px 0px 15px 5px ${(props) => props.shadowColor + "88"};
+  box-shadow: 0px 0px 15px 5px ${(props) => props.shadowColor + "88"},
+    inset 0px 0px 15px 5px #e0e0e0;
+  position: relative;
 `;
 
 const IndicatorMeter = styled.div<{ color: string }>`
@@ -35,11 +38,24 @@ const IndicatorMeter = styled.div<{ color: string }>`
   font-size: ${(props) => (props.theme.width > 500 ? 2 : 1)}rem;
 `;
 
+const Level = styled.p`
+  margin: 0;
+  font-size: 0.75em;
+`;
+
+const Aqi = styled.h1`
+  margin: 0;
+  font-size: 1.2em;
+`;
+
 interface AqiIndicatorProps {
   aqi: number;
 }
 
-export default function AqiIndicator({ aqi }: AqiIndicatorProps) {
+export default function AqiIndicator({
+  aqi,
+  requestTimestamp,
+}: AqiIndicatorProps & RequestStatusProp) {
   const theme = useTheme();
   console.log({ theme });
   const { level, color } = useMemo(() => lookupAirPollutionLevel(aqi), [aqi]);
@@ -47,9 +63,10 @@ export default function AqiIndicator({ aqi }: AqiIndicatorProps) {
     <IndicatorWrapper>
       <Indicator shadowColor={color}>
         <IndicatorMeter color={color}>
-          <div>{aqi}</div>
-          <div>{level}</div>
+          <Aqi>{aqi}</Aqi>
+          <Level>{level}</Level>
         </IndicatorMeter>
+        <RequestStatus requestTimestamp={requestTimestamp} />
       </Indicator>
     </IndicatorWrapper>
   );

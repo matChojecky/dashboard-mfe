@@ -10,7 +10,7 @@ const {
 } = require("webpack-manifest-plugin");
 const postcssNormalize = require("postcss-normalize");
 const paths = require("./paths");
-const { SUPPORTED_WIDGETS } = require("../../../widgets.config");
+const { StonksWatcherWidget } = require("../widget.config");
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -75,26 +75,13 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
   return loaders;
 };
 
-// const hasJsxRuntime = (() => {
-//     if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
-//         return false;
-//     }
-
-//     try {
-//         require.resolve('react/jsx-runtime');
-//         return true;
-//     } catch (e) {
-//         return false;
-//     }
-// })();
-
 module.exports = {
   mode: isDevelopment ? "development" : "production",
   bail: !isDevelopment,
   devtool: isDevelopment ? "cheap-module-source-map" : "source-map",
   devServer: {
     contentBase: paths.appBuild,
-    port: 3000,
+    port: 3002,
   },
   entry: paths.appIndexJs,
   output: {
@@ -203,32 +190,6 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve("babel-loader"),
             options: {
-              //   customize: require.resolve(
-              //     'babel-preset-react-app/webpack-overrides'
-              //   ),
-              presets: [
-                // [
-                //   require.resolve('babel-preset-react-app'),
-                //   {
-                //     runtime: hasJsxRuntime ? 'automatic' : 'classic',
-                //   },
-                // ],
-                "@babel/preset-typescript",
-              ],
-
-              plugins: [
-                [
-                  require.resolve("babel-plugin-named-asset-import"),
-                  {
-                    loaderMap: {
-                      svg: {
-                        ReactComponent:
-                          "@svgr/webpack?-svgo,+titleProp,+ref![path]",
-                      },
-                    },
-                  },
-                ],
-              ].filter(Boolean),
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
@@ -248,12 +209,7 @@ module.exports = {
               babelrc: false,
               configFile: false,
               compact: false,
-              presets: [
-                // [
-                //   require.resolve('babel-preset-react-app/dependencies'),
-                //   { helpers: true },
-                // ],
-              ],
+              presets: [],
               cacheDirectory: true,
               cacheCompression: false,
 
@@ -304,40 +260,43 @@ module.exports = {
   },
   plugins: [
     new ModuleFederationPlugin({
-      name: "root",
-      remotes: SUPPORTED_WIDGETS.reduce((curr, widget) => {
-        curr[widget.id] = `${widget.id}@${widget.url}`;
-        return curr;
-      }, {}),
+      name: StonksWatcherWidget.id,
+      library: {
+        type: "var",
+        name: StonksWatcherWidget.id,
+      },
       filename: "remoteEntry.js",
-      exposes: {},
-      shared: Object.keys(appPackageJson.dependencies),
+      remotes: {},
+      exposes: {
+        "./": "./src/index",
+      },
+      shared: {},
     }),
-    new HtmlWebpackPlugin(
-      Object.assign(
-        {},
-        {
-          inject: true,
-          template: paths.appHtml,
-        },
-        !isDevelopment
-          ? {
-              minify: {
-                removeComments: true,
-                collapseWhitespace: true,
-                removeRedundantAttributes: true,
-                useShortDoctype: true,
-                removeEmptyAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                keepClosingSlash: true,
-                minifyJS: true,
-                minifyCSS: true,
-                minifyURLs: true,
-              },
-            }
-          : undefined
-      )
-    ),
+    // new HtmlWebpackPlugin(
+    //   Object.assign(
+    //     {},
+    //     {
+    //       inject: true,
+    //       template: paths.appHtml,
+    //     },
+    //     !isDevelopment
+    //       ? {
+    //           minify: {
+    //             removeComments: true,
+    //             collapseWhitespace: true,
+    //             removeRedundantAttributes: true,
+    //             useShortDoctype: true,
+    //             removeEmptyAttributes: true,
+    //             removeStyleLinkTypeAttributes: true,
+    //             keepClosingSlash: true,
+    //             minifyJS: true,
+    //             minifyCSS: true,
+    //             minifyURLs: true,
+    //           },
+    //         }
+    //       : undefined
+    //   )
+    // ),
 
     !isDevelopment &&
       new MiniCssExtractPlugin({

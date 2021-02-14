@@ -37,7 +37,6 @@ export default class WidgetService {
 
   async importWidgets(): Promise<Widget[]> {
     // const widgets = Object.values(this.getUsedWidgets()) as Widget[];
-    console.log(this.getSupportedWidgets());
     const widgets = this.getSupportedWidgets() as Widget[];
 
     await Promise.all(widgets.map((w) => AssetsLoader.loadScript(w.url)));
@@ -46,32 +45,35 @@ export default class WidgetService {
       for (const widget of widgets) {
         const widget_module = await AssetsLoader.loadComponent(widget.id)();
         console.log(widget_module);
-        widget.settings = widget.settings ?? { width: 2, height: 3 };
+        widget.settings = widget.settings ?? {
+          width: Math.ceil(Math.random() * 3),
+          height: Math.ceil(Math.random() * 3),
+        };
         widget.module = widget_module ?? noopModule(widget);
       }
     } catch (err) {
       console.error(err);
     }
 
-    // return widgets;
-    return [
-      ...widgets,
-      ...Array(3)
-        .fill(undefined)
-        .map((_, idx) => ({
-          name: "test",
-          id: "testing-module-" + idx,
-          url: "testing-module-" + idx,
-          settings: {
-            width: Math.floor(Math.random() * 5),
-            height: Math.floor(Math.random() * 5),
-          },
-          module: {
-            mount(root) {
-              root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
-            },
-          },
-        })),
-    ];
+    return widgets;
+    // return [
+    //   ...widgets,
+    //   ...Array(3)
+    //     .fill(undefined)
+    //     .map((_, idx) => ({
+    //       name: "test",
+    //       id: "testing-module-" + idx,
+    //       url: "testing-module-" + idx,
+    //       settings: {
+    //         width: Math.floor(Math.random() * 5),
+    //         height: Math.floor(Math.random() * 5),
+    //       },
+    //       module: {
+    //         mount(root) {
+    //           root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
+    //         },
+    //       },
+    //     })),
+    // ];
   }
 }

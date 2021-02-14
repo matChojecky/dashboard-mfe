@@ -1,3 +1,4 @@
+import { WidgetInfo } from "./types";
 
 export const WIDGET_STORAGE_KEY = "widgets_settings";
 

@@ -1,7 +1,7 @@
 {
   "packages": [
     "packages/root",
-    "packages/widgets/air_polution"
+    "packages/widgets/*"
   ],
   "version": "0.0.0"
 }
