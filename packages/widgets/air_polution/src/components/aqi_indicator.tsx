@@ -40,7 +40,8 @@ const IndicatorMeter = styled.div<{ color: string }>`
 
 const Level = styled.p`
   margin: 0;
-  font-size: 0.75em;
+  font-size: 0.5em;
+  text-align: center;
 `;
 
 const Aqi = styled.h1`

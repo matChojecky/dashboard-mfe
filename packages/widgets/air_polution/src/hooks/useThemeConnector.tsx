@@ -20,7 +20,6 @@ export const useThemeConnector = (root: Element) => {
   useEffect(() => {
     const resizeEffect = () => {
       const { clientWidth: width, clientHeight: height } = root;
-      console.log({ width, height });
       setTheme((prev) =>
         Object.assign({}, prev, {
           height,

@@ -18,9 +18,6 @@ export default class Dashboard extends _View {
     widgets.forEach((_widget) => {
       const widgetContainer = document.createElement("section");
       const { width = 2, height = 2, ...settings } = _widget.settings;
-      widgetContainer.addEventListener("click", () => {
-        console.log("CLICKED", _widget.id);
-      });
 
       widgetContainer.id = _widget.id;
       widgetContainer.classList.add("widget");

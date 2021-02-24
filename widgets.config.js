@@ -7,7 +7,7 @@ const {
 
 const WIDGETS_MAP = {
   AirPolutionWidget,
-  StonksWatcherWidget,
+  StonksWatcherWidget
 };
 
 module.exports = WIDGETS_MAP;

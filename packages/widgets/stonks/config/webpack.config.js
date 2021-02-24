@@ -231,10 +231,25 @@ module.exports = {
           },
           {
             test: /\.(scss|sass)$/,
+            exclude: /\.module\.(scss|sass)$/,
             use: getStyleLoaders(
               {
                 importLoaders: 3,
                 sourceMap: true,
+              },
+              "sass-loader"
+            ),
+            sideEffects: true,
+          },
+          {
+            test: /\.module\.(scss|sass)$/,
+            use: getStyleLoaders(
+              {
+                importLoaders: 3,
+                sourceMap: true,
+                modules: {
+                  localIdentName: `${StonksWatcherWidget.id}--[local]--[hash:base64:5]`,
+                },
               },
               "sass-loader"
             ),

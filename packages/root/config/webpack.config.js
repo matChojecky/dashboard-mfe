@@ -309,8 +309,8 @@ module.exports = {
         curr[widget.id] = `${widget.id}@${widget.url}`;
         return curr;
       }, {}),
-      filename: "remoteEntry.js",
-      exposes: {},
+      // filename: "remoteEntry.js",
+      // exposes: {},
       shared: Object.keys(appPackageJson.dependencies),
     }),
     new HtmlWebpackPlugin(

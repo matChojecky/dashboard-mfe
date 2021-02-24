@@ -31,23 +31,22 @@ export default class WidgetService {
     window.localStorage.setItem(WIDGET_STORAGE_KEY, JSON.stringify(widgets));
   }
 
-  getSupportedWidgets() {
-    return this.widgets;
+  get supportedWidgets() {
+    return [...this.widgets];
   }
 
   async importWidgets(): Promise<Widget[]> {
     // const widgets = Object.values(this.getUsedWidgets()) as Widget[];
-    const widgets = this.getSupportedWidgets() as Widget[];
+    const widgets = this.supportedWidgets as Widget[];
 
     await Promise.all(widgets.map((w) => AssetsLoader.loadScript(w.url)));
 
     try {
       for (const widget of widgets) {
         const widget_module = await AssetsLoader.loadComponent(widget.id)();
-        console.log(widget_module);
         widget.settings = widget.settings ?? {
-          width: Math.ceil(Math.random() * 3),
-          height: Math.ceil(Math.random() * 3),
+          width: 2,
+          height: 2,
         };
         widget.module = widget_module ?? noopModule(widget);
       }
@@ -56,24 +55,5 @@ export default class WidgetService {
     }
 
     return widgets;
-    // return [
-    //   ...widgets,
-    //   ...Array(3)
-    //     .fill(undefined)
-    //     .map((_, idx) => ({
-    //       name: "test",
-    //       id: "testing-module-" + idx,
-    //       url: "testing-module-" + idx,
-    //       settings: {
-    //         width: Math.floor(Math.random() * 5),
-    //         height: Math.floor(Math.random() * 5),
-    //       },
-    //       module: {
-    //         mount(root) {
-    //           root.innerHTML = `<h1>DUPA ${idx + 1}</h1>`;
-    //         },
-    //       },
-    //     })),
-    // ];
   }
 }

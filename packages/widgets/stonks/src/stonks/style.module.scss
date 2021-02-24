@@ -1,0 +1,50 @@
+.stonks-wrapper {
+    background-color: #100c08;
+    color: #ffffff;
+    width: 100%;
+    height: 100%;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    font-size: 1.2em;
+  
+    .stonks-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5em;
+  
+      &-group {
+        display: flex;
+        flex-direction: column;
+  
+        &--pad-right {
+          text-align: right;
+        }
+  
+        &--base25 {
+          flex-basis: 25%;
+          min-width: 80px;
+        }
+
+        &--base75 {
+          flex-basis: 75%;
+        }
+  
+        &-fullname {
+          color: #b9b9b9;
+          font-size: 0.85em;
+        }
+  
+        &-change {
+          border-radius: 5px;
+          padding: 1px 2px;
+          &--profit {
+            background-color: #31c65b;
+          }
+  
+          &--loss {
+            background-color: #fe3c30;
+          }
+        }
+      }
+    }
+  }

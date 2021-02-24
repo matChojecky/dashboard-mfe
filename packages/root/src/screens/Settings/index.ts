@@ -6,6 +6,7 @@ export default class Settings extends _View {
   constructor(private _widgetService: WidgetService) {
     super("settings-screen");
     this._view.appendChild(this.appendSupportedWidgetsList());
+
   }
 
   mount() {
@@ -30,12 +31,12 @@ export default class Settings extends _View {
   appendSupportedWidgetsList() {
       const list = document.createElement('ul');
 
-      this._widgetService.getSupportedWidgets().forEach(_widget => {
+      this._widgetService.supportedWidgets.forEach(_widget => {
           const listItem = document.createElement('li');
           listItem.innerHTML = _widget.name;
-          listItem.addEventListener('click', () => {
-              console.log('Clicked: ', _widget.id);
-          });
+          // listItem.addEventListener('click', () => {
+          //     console.log('Clicked: ', _widget.id);
+          // });
           list.appendChild(listItem);
       });
 

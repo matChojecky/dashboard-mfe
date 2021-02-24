@@ -72,8 +72,8 @@ const PollutantInfo = styled.div`
 `;
 
 const PollutionLevelIndicatior = styled.div<{ pollutionLevelColor: string }>`
-  width: 1em;
-  height: 1em;
+  width: 0.51em;
+  height: 0.51em;
   background-color: ${(props) => props.pollutionLevelColor};
   display: inline-block;
   border-radius: 5px;

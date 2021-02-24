@@ -10,7 +10,7 @@ const {
 } = require("webpack-manifest-plugin");
 const postcssNormalize = require("postcss-normalize");
 const paths = require("./paths");
-// const { AirPolutionWidget } = require("../widget.config");
+// const { WidgetConfig } = require("../widget.config");
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -305,10 +305,10 @@ module.exports = {
   plugins: [
 
     new ModuleFederationPlugin({
-      name: AirPolutionWidget.id,
+      name: WidgetConfig.id,
       library: {
         type: 'var',
-        name: AirPolutionWidget.id
+        name: WidgetConfig.id
       },
       filename: "remoteEntry.js",
       remotes: {},
