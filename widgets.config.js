@@ -4,10 +4,14 @@ const {
 const {
   StonksWatcherWidget,
 } = require("./packages/widgets/stonks/widget.config");
+const {
+  NoAInjectorConfig
+} = require("./packages/widgets/noa-injector/widget.config");
 
 const WIDGETS_MAP = {
   AirPolutionWidget,
-  StonksWatcherWidget
+  StonksWatcherWidget,
+  NoAInjectorConfig
 };
 
 module.exports = WIDGETS_MAP;

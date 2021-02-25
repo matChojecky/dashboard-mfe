@@ -1,5 +1,5 @@
 {
-  "name": "@dashboard/*",
+  "name": "@dashboard/noa_injector",
   "version": "0.0.0",
   "private": true,
   "devDependencies": {
@@ -34,7 +34,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack-cli serve -c config/webpack.config.js",
     "build": "webpack -c ./config/webpack.config.js",
-    "serve": "serve build -p PORT",
+    "serve": "serve build -p 4420",
     "clean": "rm -rf dist"
   },
   "dependencies": {
