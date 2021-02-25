@@ -2,7 +2,7 @@ import { h, text } from "hyperapp";
 import { PoleHttpSubsctiption } from "../lib/PoleHttpSubsctiption";
 import styles from "./style.module.scss";
 
-const API_TOKEN = "pk_001aa2a7130c475c9d2618f91c5acaf0";
+const API_TOKEN = "";
 
 const WATCHED_SYMBOLS = ["tsla", "amc", "gme", "CDR-PW"];
 
